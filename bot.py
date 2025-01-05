@@ -53,7 +53,7 @@ async def on_interaction(interaction):
                 file = discord.File(photo)
                 await interaction.response.send_message(file=file, content="Tebrikler, resmi aldınız!")
         else:
-            await interaction.response.send_message(content="Maalesef, bu resmi bir başkası çoktan aldı.", ephemeral=True)
+            await interaction.response.send_message(content="Maalesef, bu resmi bir başkası çoktan aldı...", ephemeral=True)
 
 @bot.event
 async def on_ready():

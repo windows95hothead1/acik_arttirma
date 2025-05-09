@@ -1,2 +1,2 @@
-TOKEN = 'MTIxNTk1NjI2OTQ0NjQ2MzU2OQ.G9_TWL.RRRAjFyx5hTssgHnzSogMCxSZKbkaJstsgQZOg'
+TOKEN = ''
 DATABASE = 'filmes/TUR-PythonLVL3-M4L1/data.db'

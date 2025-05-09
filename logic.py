@@ -72,25 +72,40 @@ class DatabaseManager:
 
 
     def get_users(self):
+        conn = sqlite3.connect(self.database)
+        with conn:
+            cur = conn.cursor()
+            cur.execute('')
+            cur.execute("""SELECT * FROM users""")
         return [x[0] for x in cur.fetchall()] 
         
     def get_prize_img(self, prize_id):
+        conn = sqlite3.connect(self.database)
+        with conn:
+            cur = conn.cursor()
+            cur.execute('')
+            cur.execute("""SELECT image FROM prizes WHERE prize_id = ?""", (prize_id,))
         return cur.fetchall()[0][0]
 
     def get_random_prize(self):
+        conn = sqlite3.connect(self.database)
+        with conn:
+            cur = conn.cursor()
+            cur.execute('')
+            cur.execute("""SELECT * FROM prizes WHERE used = 0 ORDER BY RANDOM() LIMIT 1""")
         return cur.fetchall()[0]
     
   
 def hide_img(img_name):
-    image = cv2.imread(f'img/{img_name}')
+    image = cv2.imread(f'filmes/TUR-PythonLVL3-M4L1/img/{img_name}')
     blurred_image = cv2.GaussianBlur(image, (15, 15), 0)
     pixelated_image = cv2.resize(blurred_image, (30, 30), interpolation=cv2.INTER_NEAREST)
     pixelated_image = cv2.resize(pixelated_image, (image.shape[1], image.shape[0]), interpolation=cv2.INTER_NEAREST)
-    cv2.imwrite(f'hidden_img/{img_name}', pixelated_image)
+    cv2.imwrite(f'filmes/TUR-PythonLVL3-M4L1/hidden_img/{img_name}', pixelated_image)
 
 if __name__ == '__main__':
     manager = DatabaseManager(DATABASE)
     manager.create_tables()
-    prizes_img = os.listdir('img')
+    prizes_img = os.listdir('filmes/TUR-PythonLVL3-M4L1/img')
     data = [(x,) for x in prizes_img]
     manager.add_prize(data)

@@ -31,7 +31,7 @@ async def send_message():
         hide_img(img)
         user = await bot.fetch_user(user_id) 
         if user:
-            await send_image(user, f'hidden_img/{img}', prize_id)
+            await send_image(user, f'filmes/TUR-PythonLVL3-M4L1/hidden_img/{img}', prize_id)
         manager.mark_prize_used(prize_id)
 
 async def send_image(user, image_path, prize_id):
@@ -49,7 +49,7 @@ async def on_interaction(interaction):
         user_id = interaction.user.id
         img = manager.get_prize_img(custom_id)
         if manager.add_winner(user_id, custom_id):
-            with open(f'img/{img}', 'rb') as photo:
+            with open(f'filmes/TUR-PythonLVL3-M4L1/img/{img}', 'rb') as photo:
                 file = discord.File(photo)
                 await interaction.response.send_message(file=file, content="Tebrikler, resmi aldınız!")
         else:

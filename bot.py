@@ -42,18 +42,32 @@ async def send_image(user, image_path, prize_id):
         view.add_item(button)
         await user.send(file=file, view=view)
 
+@bot.command()
+async def rating(ctx):
+    res = manager.get_rating()
+    res = [f'| @{x[0]:<11} | {x[1]:<11}|\n{"_"*26}' for x in res]
+    res = '\n'.join(res)
+    res = f'|USER_NAME    |COUNT_PRIZE|\n{"_"*26}\n' + res
+    await ctx.send(f"```\n{res}\n```")
+
 @bot.event
 async def on_interaction(interaction):
     if interaction.type == discord.InteractionType.component:
         custom_id = interaction.data['custom_id']
         user_id = interaction.user.id
-        img = manager.get_prize_img(custom_id)
-        if manager.add_winner(user_id, custom_id):
-            with open(f'filmes/TUR-PythonLVL3-M4L1/img/{img}', 'rb') as photo:
-                file = discord.File(photo)
-                await interaction.response.send_message(file=file, content="Tebrikler, resmi aldınız!")
+
+        if manager.get_winners_count(custom_id) < 1:
+            res = manager.add_winner(user_id, custom_id)
+            if res:
+                img = manager.get_prize_img(custom_id)
+                with open(f'filmes/TUR-PythonLVL3-M4L1/img/{img}', 'rb') as photo:
+                    file = discord.File(photo)
+                    await interaction.response.send_message(file=file, content="Tebrikler, resmi aldınız!")
+            else:
+                await interaction.response.send_message(content="Bu resme zaten sahipsiniz!", ephemeral=True)
         else:
-            await interaction.response.send_message(content="Maalesef, bu resmi bir başkası çoktan aldı...", ephemeral=True)
+            await interaction.response.send_message(content="Bu resim için kazanan sayısı doldu!", ephemeral=True)
+
 
 @bot.event
 async def on_ready():

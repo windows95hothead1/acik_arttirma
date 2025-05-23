@@ -1,0 +1,17 @@
+-- database: ../../M4L1/movie (1).db
+
+SELECT * FROM genres;
+
+SELECT genre_id, COUNT(*) 
+FROM movies_genres
+GROUP BY genre_id;
+
+SELECT title, name AS director_name
+FROM movies
+INNER JOIN directors ON movies.director_id = directors.id;
+
+
+SELECT title, genre
+FROM movies
+INNER JOIN movies_genres ON movies.id = movies_genres.movie_id
+INNER JOIN genres ON movies_genres.genre_id = genres.genre_id;

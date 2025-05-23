@@ -95,6 +95,38 @@ class DatabaseManager:
             cur.execute("""SELECT * FROM prizes WHERE used = 0 ORDER BY RANDOM() LIMIT 1""")
         return cur.fetchall()[0]
     
+    def get_winners_count(self, prize_id):
+        conn = sqlite3.connect(self.database)
+        with conn:
+            cur = conn.cursor()
+            cur.execute('SELECT - sorgu', (prize_id, ))
+            return cur.fetchall()[0][0]
+   
+   
+    
+    def get_rating(self):
+        conn = sqlite3.connect(self.database)
+        with conn:
+            cur = conn.cursor()
+            cur.execute('''
+                        SELECT users.user_name, COUNT(*) AS prize_count
+                        FROM winners
+                        INNER JOIN users ON winners.user_id = users.user_id
+                        GROUP BY users.user_name 
+                        ORDER BY prize_count DESC 
+                        LIMIT 10;
+                        ''')
+            return cur.fetchall()
+    def get_winners_img(self, user_id):
+        conn = sqlite3.connect(self.database)
+        with conn:
+            cur = conn.cursor()
+            cur.execute(''' 
+            SELECT image FROM winners 
+            INNER JOIN prizes ON 
+            winners.prize_id = prizes.prize_id
+            WHERE user_id = ?''', (user_id, ))
+            return cur.fetchall()
   
 def hide_img(img_name):
     image = cv2.imread(f'filmes/TUR-PythonLVL3-M4L1/img/{img_name}')
